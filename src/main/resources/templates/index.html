@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <meta charset="UTF-8"/>
+
+    <title th:text="${invoice.getInvoiceOperation().getName()}"/>
+
+
+    <style>
+        /*
+	 CSS-Tricks Example
+	 by Chris Coyier
+	 http://css-tricks.com
+*/
+
+        {
+            margin: 0
+        ;
+            padding: 0
+        ;
+        }
+
+        p, span, td {
+
+            font-size: 12px;
+        }
+
+        #page-wrap {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        span {
+            border: 0;
+
+            overflow: hidden;
+            resize: none;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        #header {
+
+
+            text-align: center;
+            font-size: 24px;
+            text-decoration: underline;
+
+            text-transform: uppercase;
+padding-bottom: 10px;
+
+        }
+
+        .address {
+            width: 250px;
+            height: 150px;
+            float: left;
+        }
+
+        #customer {
+            overflow: hidden;
+        }
+
+
+        #meta {
+            margin-top: 1px;
+
+            float: right;
+        }
+
+        #meta td {
+            text-align: right;
+        }
+
+        #meta td.meta-head {
+            text-align: left;
+            background: #eee;
+        }
+
+        #meta td span {
+            width: 100%;
+            height: 20px;
+            text-align: right;
+        }
+
+        #items {
+            clear: both;
+            width: 100%;
+            margin: 30px 0 0 0;
+            border: 1px solid black;
+        }
+
+        #items th {
+            background: #eee;
+        }
+
+        #items span {
+            width: 80px;
+            height: 50px;
+        }
+
+        #items tr.item-row td {
+            border-right: none;
+        }
+
+        #items td.description {
+            width: 300px;
+        }
+
+        #items td.item-name {
+
+        }
+
+        #items td.description span, #items td.item-name span {
+            width: 100%;
+        }
+
+        #items td.total-line {
+            border-right: 0;
+            text-align: right;
+        }
+
+        #items td.total-value {
+            border-left: 0;
+
+        }
+
+        #items td.total-value span {
+            height: 20px;
+            background: none;
+        }
+
+        #items td.balance {
+            background: #eee;
+        }
+
+        #items td.blank {
+            border: 0;
+        }
+
+
+        #terms h5 {
+            text-transform: uppercase;
+            font: 13px Helvetica, Sans-Serif;
+            letter-spacing: 10px;
+            border-bottom: 1px solid black;
+            padding: 0 0 8px 0;
+            margin: 0 0 8px 0;
+        }
+
+        #terms span {
+            width: 100%;
+            text-align: center;
+        }
+
+
+        #client {
+            width: 45%;
+            vertical-align: top;
+            display: inline-block;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        ul {
+            list-style: none;
+            padding-inline-start: inherit;
+        }
+
+        #signtaure {
+            width: 60%;
+            vertical-align: top;
+            float: right;
+            display: inline-block;
+        }
+
+        #signtaure table tr td {
+            border: none;
+        }
+    </style>
+</head>
+<body style="">
+<div id="page-wrap">
+
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <h3 id="header" th:text="${invoice.getInvoiceOperation().getName()}"> FACTURE DE VENTE</h3>
+
+    <br/>
+    <br/>
+    <br/>
+    <!--  <div id="identity">
+          <p class="address">
+              <span th:text="${companyInfo.getTradeName()}"> OMEGA NUMERIC IT</span> <br/>
+              <span th:text="${companyInfo.getTaxPayerIdentifier()}">123456789010 </span> <br/>
+              <span th:text="${companyInfo.getAdresse()} "> COTONOU 123</span> <br/>
+              <span th:text="${companyInfo.getCity()} "> COTONOU</span> <br/>
+              <span th:text="${companyInfo.getPhone()} ">62822317 </span> <br/>
+              <span th:text="${companyInfo.getEmail()} "> contact@omeganumeric.techx</span>
+          </p>
+
+      </div>
+      <div id="signtaure">
+
+          <table>
+              <tr style="text-align: center">
+                  <td colspan="2">CODE MECeF / DGI</td>
+              </tr>
+
+              <tr>
+
+                  <td colspan="2"><strong th:text="${invoice.getMecefReference().getSplitedSignature()}"/></td>
+              </tr>
+
+              <tr>
+                  <td style="text-align: right">NIM &nbsp;:</td>
+                  <td><strong th:text="${invoice.getMecefReference().getDeviceNo()}"/></td>
+              </tr>
+              <tr >
+                  <td  style="text-align: right">MECeF Compteur &nbsp;:</td>
+                  <td><strong th:text="${invoice.getMecefReference().getMecefCounterNumber()}"/></td>
+              </tr>
+              <tr>
+                  <td  style="text-align: right">MECeF date et Heure &nbsp;:</td>
+                  <td> &nbsp;<strong
+                          th:text="${invoice.getMecefReference().getHumanDate()}">29-12-2020 15:14:17</strong></td>
+              </tr>
+
+              <tr style="text-align: center">
+
+                  <td colspan="2">
+                      <img th:src="@{'data:image/jpeg;base64,'+${invoice.getMecefReference().generateBase64Image()}}"
+                           width="100" height="100"/>
+
+                  </td>
+              </tr>
+
+          </table>
+
+
+      </div>-->
+
+    <div style="clear:both"></div>
+    <div id="customer">
+        <div id="client">
+
+
+            <strong>Client</strong><br/>
+
+            Intitulé: <span th:text="${invoice.getCustomer().getTradeName()}">BOA</span> <br/>
+            IFU: <span th:text="${invoice.getCustomer().getTaxPayerIdentifier()}">BOA</span>
+            <br/>
+
+            <Strong>Vendeur :</Strong> <span th:text="${invoice.getUser().getId()}">1</span> &nbsp; <span
+                th:text="${invoice.getUser().getName()}">Ismeilda</span>
+
+
+        </div>
+
+
+        <table id="meta">
+            <tbody>
+            <tr>
+                <td class="meta-head" th:text="Reférence"> #</td>
+                <td th:text="${invoice.getReference()}"></td>
+            </tr>
+
+            <tr th:if=" ${invoice.getInvoiceOperation().getValue()=='FA' or invoice.getInvoiceOperation().getValue()=='EA'}">
+                <td class="meta-head"> Reference de la facture originale MECeF</td>
+                <td th:text="${invoice.getParent().getMecefReference().getRefundReference()}"></td>
+            </tr>
+            <tr>
+                <td class="meta-head">Date</td>
+                <td><span id="date" th:text="${invoice.getMecefReference().getHumanDate()}"> </span></td>
+            </tr>
+            <tr>
+                <td class="meta-head">Total à payer</td>
+                <td>
+                    <div class="due"
+                         th:text="${  #numbers.formatDecimal(invoice.getMecefReference().getSubTotals().getTotalInvoiceAmount(), 0, 'POINT', 0, 'POINT') }">
+                        $650.00
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <table id="items">
+        <tbody>
+        <tr>
+            <th>CODE PRODUIT</th>
+            <th>DESIGNATION</th>
+            <th>QTE &nbsp;</th>
+            <th>COLISAGE</th>
+            <th>PU TTC</th>
+            <th>TS &nbsp;</th>
+
+            <th>MONTANT</th>
+        </tr>
+        <tr class="item-row" th:each="productLine: ${productLines}">
+            <td class="item-name" th:text="${productLine.getReference()}"></td>
+            <td class="item-name" th:text="${productLine.getName()}"></td>
+
+
+            <!--     <td class="item-name" th:if="${
+                 #strings.equals(invoice.getCustomer().getRegimeFiscal(),'EXCEPTION')
+                 &&
+                  #strings.equals(productSell.getProduct().getTaxGroup().getGroupeCode(),'B')
+                 }"
+                     th:text="${productSell.getProduct().getName() +' (D)' }"
+                 > </td>
+
+
+
+                 <td class="item-name" th:if="${#strings.equals(companyInfo.getRegimeFiscal(),'TPS')}"
+                     th:text="${productSell.getProduct().getName() +' (E)' }"
+                 > </td>
+
+
+
+
+                 <td class="item-name" th:unless="${
+                 #strings.equals(invoice.getCustomer().getRegimeFiscal(),'EXCEPTION')
+                  or
+                  #strings.equals(companyInfo.getRegimeFiscal(),'TPS')
+                 }"
+                     th:text="${productSell.getProduct().getName() +' ('+ productSell.getProduct().getTaxGroup().getGroupeCode() +')' }"
+                 > </td>-->
+
+
+            <td>
+
+                <span class="qty" th:text="${productLine.getQuantity()}"/>
+
+            </td>
+            <td>
+
+                <span class="qty" th:text="${productLine.getCoulissage()}"/>
+
+            </td>
+            <td><span class="cost"
+                      th:text="${  #numbers.formatDecimal(productLine.getPrice() , 0, 'POINT', 0, 'POINT') }"></span>
+            </td>
+            <td><span class="cost"
+                      th:text="${  #numbers.formatDecimal(productLine.getTaxSpecific(), 0, 'POINT', 0, 'POINT') }"></span>
+            </td>
+            <td><span class="price"
+                      th:text="${ #numbers.formatDecimal(productLine.getTotal() , 0, 'POINT', 0, 'POINT')}"> </span>
+            </td>
+        </tr>
+
+
+        <tr th:each="subtotal: ${taxGroupSubTotals}">
+            <td colspan="3" class="blank"></td>
+            <td colspan="3" class="total-line">
+
+                <div th:if="${#strings.equals(subtotal.getGroup(),'B') or #strings.equals(subtotal.getGroup(),'D') or #strings.equals(subtotal.getGroup(),'C') }"
+
+                     th:text="${' TOTAL HT ('+ subtotal.getGroup()+')            '}"
+                />
+
+
+                <span th:text="${ 'TOTAL '+ subtotal.getName()}"></span>
+
+
+            </td>
+            <td class="total-value">
+
+                <div th:if="${#strings.equals(subtotal.getGroup(),'B') or #strings.equals(subtotal.getGroup(),'D') or #strings.equals(subtotal.getGroup(),'C') }"
+                     th:text="${#numbers.formatDecimal( subtotal.getHorsTax()- invoice.getMecefReference().getSubTotals().getTotalSpecificTaxAmount(), 0, 'POINT', 0, 'POINT') }">
+                    $650.00
+                </div>
+
+                <div th:if="${#strings.equals(subtotal.getGroup(),'B') or #strings.equals(subtotal.getGroup(),'D') or #strings.equals(subtotal.getGroup(),'C') }"
+                     th:text="${#numbers.formatDecimal(subtotal.getTotalVATAmount(), 0, 'POINT', 0, 'POINT')}">
+                    $650.00
+                </div>
+
+
+                <div th:unless="${#strings.equals(subtotal.getGroup(),'B') or  #strings.equals(subtotal.getGroup(),'D') or  #strings.equals(subtotal.getGroup(),'C')}"
+                     th:text="${#numbers.formatDecimal(subtotal.getTotalAmount(), 0, 'POINT', 0, 'POINT')}">
+                    $650.00
+                </div>
+
+
+            </td>
+        </tr>
+        <tr th:unless="${#strings.equals(invoice.getMecefReference().getSubTotals().getTotalAibAmount(),'0') }">
+            <td colspan="3" class="blank"></td>
+            <td colspan="3" class="total-line">Total <span
+                    th:text="${ invoice.getCustomer().getAib().getName()}"></span></td>
+            <td class="total-value">
+                <div id="total"
+                     th:text="${#numbers.formatDecimal(invoice.getMecefReference().getSubTotals().getTotalAibAmount(), 0, 'POINT', 0, 'POINT')}">
+                    $650.00
+                </div>
+            </td>
+        </tr>
+        <tr th:unless="${#strings.equals(invoice.getMecefReference().getSubTotals().getTotalSpecificTaxAmount(),'0') }"
+        >
+            <td colspan="3" class="blank"></td>
+            <td colspan="3" class="total-line">TOTAL TS (1%)
+            </td>
+            <td class="total-value">
+                <span id="paid"
+                      th:text="${#numbers.formatDecimal(invoice.getMecefReference().getSubTotals().getTotalSpecificTaxAmount(),0,'POINT',0,'POINT')}"> </span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" class="blank"></td>
+            <td colspan="3" class="total-line balance">TOTAL</td>
+            <td class="total-value balance">
+                <strong class="due"
+                        th:text="${#numbers.formatDecimal(invoice.getMecefReference().getSubTotals().getTotalInvoiceAmount(), 0, 'POINT', 0, 'POINT')}"></strong>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p style="font-size: 18px">
+        La présente facture est arrêtée à la somme de : <strong
+            th:text="${invoice.getMecefReference().getSubTotals().amountInLetters()+'  francs CFA'}"> </strong>
+    </p>
+    <br/>
+    <br/>
+    <br/>
+    <!--    <div id="identity">-->
+    <!--        <p class="address">-->
+    <!--            <span th:text="${companyInfo.getTradeName()}"> OMEGA NUMERIC IT</span> <br/>-->
+    <!--            <span th:text="${companyInfo.getTaxPayerIdentifier()}">123456789010 </span> <br/>-->
+    <!--            <span th:text="${companyInfo.getAdresse()} "> COTONOU 123</span> <br/>-->
+    <!--            <span th:text="${companyInfo.getCity()} "> COTONOU</span> <br/>-->
+    <!--            <span th:text="${companyInfo.getPhone()} ">62822317 </span> <br/>-->
+    <!--            <span th:text="${companyInfo.getEmail()} "> contact@omeganumeric.techx</span>-->
+    <!--        </p>-->
+
+    <!--    </div>-->
+    <div id="signtaure">
+
+        <table>
+            <tr style="text-align: center">
+                <td colspan="2">CODE MECeF / DGI</td>
+                <td rowspan="5">
+
+
+                    <img th:src="@{'data:image/jpeg;base64,'+${invoice.getMecefReference().generateBase64Image()}}"
+                         width="100" height="100"/>
+
+
+                </td>
+            </tr>
+
+            <tr>
+
+                <td colspan="2"><strong th:text="${invoice.getMecefReference().getSplitedSignature()}"/></td>
+            </tr>
+
+            <tr>
+                <td style="text-align: right">NIM &nbsp;:</td>
+                <td><strong th:text="${invoice.getMecefReference().getDeviceNo()}"/></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">MECeF Compteur &nbsp;:</td>
+                <td><strong th:text="${invoice.getMecefReference().getMecefCounterNumber()}"/></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">MECeF date et Heure &nbsp;:</td>
+                <td> &nbsp;<strong
+                        th:text="${invoice.getMecefReference().getHumanDate()}">29-12-2020 15:14:17</strong></td>
+            </tr>
+
+            <tr style="text-align: center">
+
+
+            </tr>
+
+        </table>
+
+
+    </div>
+    <div style="clear:both"></div>
+    <div id="signtaure">
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+
+        <h3> Le Directeur Commercial</h3>
+
+    </div>
+
+</div>
+
+</body>
+</html>

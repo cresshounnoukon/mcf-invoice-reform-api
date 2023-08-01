@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <meta charset="UTF-8"/>
+
+    <title th:text="${invoice.getInvoiceOperation().getName()}"/>
+
+
+    <style>
+        /*
+	 CSS-Tricks Example
+	 by Chris Coyier
+	 http://css-tricks.com
+*/
+
+        {
+            margin: 0
+        ;
+            padding: 0
+        ;
+        }
+
+        p, span, td {
+
+            font-size: 12px;
+        }
+
+        #page-wrap {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        span {
+            border: 0;
+
+            overflow: hidden;
+            resize: none;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        #header {
+
+
+            background: #222;
+            text-align: center;
+            color: white;
+
+            text-transform: uppercase;
+            letter-spacing: 10px;
+
+        }
+
+        .address {
+            width: 250px;
+            height: 150px;
+            float: left;
+        }
+
+        #customer {
+            overflow: hidden;
+        }
+
+
+        #meta {
+            margin-top: 1px;
+
+            float: right;
+        }
+
+        #meta td {
+            text-align: right;
+        }
+
+        #meta td.meta-head {
+            text-align: left;
+            background: #eee;
+        }
+
+        #meta td span {
+            width: 100%;
+            height: 20px;
+            text-align: right;
+        }
+
+        #items {
+            clear: both;
+            width: 100%;
+            margin: 30px 0 0 0;
+            border: 1px solid black;
+        }
+
+        #items th {
+            background: #eee;
+        }
+
+        #items span {
+            width: 80px;
+            height: 50px;
+        }
+
+        #items tr.item-row td {
+            border-right: none;
+        }
+
+        #items td.description {
+            width: 300px;
+        }
+
+        #items td.item-name {
+            width: 175px;
+        }
+
+        #items td.description span, #items td.item-name span {
+            width: 100%;
+        }
+
+        #items td.total-line {
+            border-right: 0;
+            text-align: right;
+        }
+
+        #items td.total-value {
+            border-left: 0;
+
+        }
+
+        #items td.total-value span {
+            height: 20px;
+            background: none;
+        }
+
+        #items td.balance {
+            background: #eee;
+        }
+
+        #items td.blank {
+            border: 0;
+        }
+
+
+        #terms h5 {
+            text-transform: uppercase;
+            font: 13px Helvetica, Sans-Serif;
+            letter-spacing: 10px;
+            border-bottom: 1px solid black;
+            padding: 0 0 8px 0;
+            margin: 0 0 8px 0;
+        }
+
+        #terms span {
+            width: 100%;
+            text-align: center;
+        }
+
+
+        #client {
+            width: 45%;
+            vertical-align: top;
+            display: inline-block;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        ul {
+            list-style: none;
+            padding-inline-start: inherit;
+        }
+
+        #signtaure {
+            width: 60%;
+            vertical-align: top;
+            float: right;
+            display: inline-block;
+        }
+
+        #signtaure table tr td {
+            border: none;
+        }
+    </style>
+</head>
+<body style="">
+<div id="page-wrap">
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <h3 id="header" > PROFORMA FACTURE DE VENTE</h3>
+
+    <br/>
+    <br/>
+    <br/>
+
+    <div style="clear:both"></div>
+    <div id="customer">
+        <div id="client">
+
+
+            <strong>Client</strong><br/>
+
+            Intitulé: <span th:text="${invoice.getCustomer().getTradeName()}">BOA</span> <br/>
+            IFU: <span th:text="${invoice.getCustomer().getTaxPayerIdentifier()}">BOA</span>
+            <br/>
+
+        </div>
+
+    </div>
+    <table id="items">
+        <tbody>
+        <tr>
+            <th>Ref</th>
+            <th>Designation</th>
+            <th>Qte &nbsp;</th>
+            <th>Colisage</th>
+            <th>PU TTC</th>
+            <th>TS &nbsp;</th>
+
+            <th>Montant TTC</th>
+        </tr>
+        <tr class="item-row" th:each="productLine: ${previewInvoice.getProductLines() }">
+            <td class="item-name" th:text="${productLine.getReference()}"></td>
+            <td class="item-name" th:text="${productLine.getName()}"></td>
+            <td>  <span class="qty" th:text="${productLine.getQuantity()}"/>  </td>
+            <td>  <span class="qty" th:text="${productLine.getCoulissage()}"/>  </td>
+            <td><span class="cost" th:text="${ productLine.getPrice() }"></span></td>
+            <td><span class="cost" th:text="${ productLine.getTaxSpecific() }"></span></td>
+            <td><span class="price" th:text="${ productLine.getTotal() }"> </span>
+            </td>
+        </tr>
+
+
+        <tr  >
+            <td colspan="6"  class="total-line">   <span>MONTANT HT  </span> </td>
+            <td class="total-value"> <span th:text="${ previewInvoice.getTotalHorsTaxe() }"></span></td>
+        </tr>
+        <tr  >
+            <td colspan="6"  class="total-line">   <span>BASE TAXABLE </span> </td>
+            <td class="total-value"> <span th:text="${ previewInvoice.getTotalBaseTaxable() }"></span></td>
+        </tr>
+        <tr  >
+            <td colspan="6"  class="total-line">   <span>TOTAL TVA  </span> </td>
+            <td class="total-value"> <span th:text="${ previewInvoice.getTotalVATAmount() }"></span></td>
+        </tr>
+        <tr  >
+            <td colspan="6"  class="total-line">   <span>AIB </span> </td>
+                <td class="total-value"> <span th:text="${ previewInvoice.getTotalAibAmount() }"></span></td>
+        </tr>
+        <tr  >
+            <td colspan="6"  class="total-line">   <span>Total </span> </td>
+                <td class="total-value"> <span th:text="${ previewInvoice.getTotalInvoiceAmount() }"></span></td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <p>
+        <strong>
+            La présente facture est arrêtée à la somme de : <span
+                th:text="${previewInvoice.amountInLetters()+'  francs CFA'}"> </span>
+        </strong>
+    </p>
+    <br/>
+    <br/>
+    <br/>
+
+
+    <div style="clear:both"></div>
+
+
+</div>
+
+</body>
+</html>
