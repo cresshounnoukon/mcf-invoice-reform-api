@@ -78,7 +78,7 @@ Contributions to the MCF Invoice Reform API are highly appreciated! If you'd lik
 
 If you encounter any issues or have questions related to the MCF Invoice Reform API, please feel free to open an issue on the GitHub repository (https://github.com/mecef-benin/mcf-invoice-reform-api/issues).
 
-For additional support or inquiries, you can also contact the MCF team at mcf-support@example.com.
+For additional support or inquiries, you can also contact the MCF team at cresshounnoukon@gmail.com.
 
 ## License
 
