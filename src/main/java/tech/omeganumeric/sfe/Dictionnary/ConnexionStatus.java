@@ -4,8 +4,8 @@ public enum ConnexionStatus {
 
 
 
-    USERNAME_EXIST(1, "Cette nom d'utilisateur est déjà disponible."),
-    EMAIL_EXIST(2, "Cette adresse emaile st déjà disponible."),
+    USERNAME_EXIST(1, "Ce nom d'utilisateur est déjà disponible."),
+    EMAIL_EXIST(2, "Cette adresse email est déjà disponible."),
     USER_REGISTERED(3, "Utilisateur enregistré avec succès.");
 
     private final int value;
